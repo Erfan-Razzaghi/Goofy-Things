@@ -25,26 +25,21 @@ CONST = Constants()
 
 class Base64ToolKit:
     @staticmethod
-    def encode(arg) -> str:
+    def encode(arg: Any) -> str:
         result = ''
         char_number = -1
         arg_str = ''.join(format(ord(char), '08b') for char in str(arg))
         length_bits = len(arg_str)
-        padding = length_bits % 6
+        padding = length_bits % CONST.BASE64_BYTES
         if padding != 0:
-            arg_str = arg_str + (6 - padding) * "0" 
+            arg_str = arg_str + (CONST.BASE64_BYTES - padding) * "0" 
         
-        for i in range(0, length_bits, 6):
-            char_number = int(arg_str[i:i+6], 2)
+        for i in range(0, length_bits, CONST.BASE64_BYTES):
+            char_number = int(arg_str[i:i+CONST.BASE64_BYTES], 2)
             result = result + CONST.BASE64_CHARS[char_number]
         
         if padding != 0:
-            result = result + (3 - padding//2) * CONST.PADDING_CHAR 
+            result = result + (CONST.BASE64_BYTES - padding) // 2 * CONST.PADDING_CHAR 
         
         return result
-        
-if __name__ == "__main__":
-    print(Base64ToolKit.encode("Hello World")) # SGVsbG8gV29ybGQ=
-    print(Base64ToolKit.encode("Hello")) # SGVsbG8=
-    print(Base64ToolKit.encode("Hell")) # SGVsbA==
     
